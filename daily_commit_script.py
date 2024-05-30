@@ -1,29 +1,38 @@
 import os
 import subprocess
+import requests
 from datetime import datetime
 
 # Configuration
 REPO_PATH = 'D:\Projects\DailyCommitScript' # path to your repository path
 FILE_PATH = os.path.join(REPO_PATH, 'daily_commit.txt')
-COMMIT_MESSAGE = 'Daily commit'
-BRANCH_NAME = 'main'  # Change to your branch name
+COMMIT_MESSAGE = f'Daily quote: {datetime.now().date()}'
+BRANCH_NAME = 'main'  # Update this to your branch name if different
+
+def get_quote():
+    response = requests.get('https://api.quotable.io/random')
+    if response.status_code == 200:
+        return response.json()['content']
+    else:
+        return 'Could not fetch a quote today.'
 
 def main():
     # Change to the repository directory
     os.chdir(REPO_PATH)
     
-    # Modify or create the file
+    # Get a random quote and save it to the file
+    quote = get_quote()
     with open(FILE_PATH, 'a') as f:
-        f.write(f'Daily commit at {datetime.now()}\n')
+        f.write(f'{datetime.now()} - {quote}\n')
     
     # Stage the changes
-    subprocess.run(['git', 'add', FILE_PATH], check=True)
+    os.system('git add .')
     
     # Commit the changes
-    subprocess.run(['git', 'commit', '-m', COMMIT_MESSAGE], check=True)
+    os.system(f'git commit -m "{COMMIT_MESSAGE}"')
     
     # Push the changes
-    subprocess.run(['git', 'push', 'origin', BRANCH_NAME], check=True)
+    os.system(f'git push origin {BRANCH_NAME}')
 
 if __name__ == '__main__':
     main()
