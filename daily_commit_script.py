@@ -15,7 +15,7 @@ def get_quote():
         response = requests.get(QUOTE_API_URL)
         response.raise_for_status()
         data = response.json()
-        return f"{data['content']} — {data['author']}"
+        return f"{data['content']} - {data['author']}"
     except requests.RequestException as e:
         print(f"Failed to fetch quote: {e}")
         return None
