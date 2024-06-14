@@ -35,7 +35,7 @@ def main():
         f.write(f'Quote of the day: {quote}\n\n')
 
     # Stage the changes
-    subprocess.run(['git', 'add', FILE_PATH], check=True)
+    subprocess.run(['git', 'add', '.'], check=True)
 
     # Commit the changes
     commit_message = f"{COMMIT_MESSAGE}: {quote}"
